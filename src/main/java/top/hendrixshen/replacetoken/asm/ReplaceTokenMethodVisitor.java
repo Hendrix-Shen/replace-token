@@ -53,10 +53,7 @@ public class ReplaceTokenMethodVisitor extends MethodVisitor {
 
     @Override
     public void visitLdcInsn(Object value) {
-        if (this.tokens.containsKey(value)) {
-            value = this.tokens.get(value);
-        }
-
+        value = this.tokens.getOrDefault(value.toString(), value);
         super.visitLdcInsn(value);
     }
 }

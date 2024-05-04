@@ -20,6 +20,10 @@ public class ReplaceTokenClassVisitor extends ClassVisitor {
 
     @Override
     public FieldVisitor visitField(int access, String name, String descriptor, String signature, Object value) {
+        if (value instanceof String) {
+            value = this.tokens.getOrDefault(value, value);
+        }
+
         return new ReplaceTokenFieldVisitor(this.api, super.visitField(access, name, descriptor, signature, value),
                 this.tokens);
     }
