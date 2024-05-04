@@ -26,20 +26,19 @@ base {
 java {
     sourceCompatibility(JavaVersion.VERSION_1_8)
     targetCompatibility(JavaVersion.VERSION_1_8)
-    withSourcesJar()
-    withJavadocJar()
 }
 
 gradlePlugin {
-    website.set("https//github.com/Hendrix-Shen/replace-token")
-    vcsUrl.set("https//github.com/Hendrix-Shen/replace-token")
+    website.set("https://github.com/Hendrix-Shen/replace-token")
+    vcsUrl.set("https://github.com/Hendrix-Shen/replace-token")
 
     plugins {
-        register("replace-token") {
+        register("replacetoken") {
             setId("top.hendrixshen.replace-token")
             setDisplayName("ReplaceToken")
             setDescription("A gradle to replace token in class file.")
             setImplementationClass("top.hendrixshen.replacetoken.ReplaceTokenPlugin")
+            tags.set(["Plugin", "Minecraft", "Mod"])
         }
     }
 }
