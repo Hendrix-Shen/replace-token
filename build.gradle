@@ -38,7 +38,7 @@ gradlePlugin {
             setDisplayName("ReplaceToken")
             setDescription("A gradle to replace token in class file.")
             setImplementationClass("top.hendrixshen.replacetoken.ReplaceTokenPlugin")
-            tags.set(["Plugin", "Minecraft", "Mod"])
+            tags.set(["Minecraft", "Mod"])
         }
     }
 }
