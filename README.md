@@ -58,7 +58,7 @@ replaceToken {
     replace("foo", "bar", "com/example2/Main")
     
     // Inner class example
-    replace("foo", "bar", "com/example3/Main$Inner")
+    replace("foo", "bar", "com/example3/Main\$Inner")
 }
 ```
 
