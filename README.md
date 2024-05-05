@@ -40,7 +40,7 @@ Now you can apply the plugin to your project:
 ```groovy
 // build.gradle
 plugins {
-    id("top.hendrixshen.replace-token").version("1.0.0")
+    id("top.hendrixshen.replace-token").version("1.0.1")
 }
 ```
 
