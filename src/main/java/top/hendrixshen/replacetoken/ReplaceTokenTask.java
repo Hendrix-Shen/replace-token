@@ -1,15 +1,23 @@
 package top.hendrixshen.replacetoken;
 
 import org.gradle.api.DefaultTask;
+import org.gradle.api.tasks.CacheableTask;
+import org.gradle.api.tasks.SourceSet;
 import org.gradle.api.tasks.TaskAction;
 import top.hendrixshen.replacetoken.asm.ReplaceTokenTransform;
 
 import java.io.IOException;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.util.Objects;
 
 public class ReplaceTokenTask extends DefaultTask {
     private static final String CLASS_SUFFIX = ".class";
+    private SourceSet sourceSet;
+
+    void setSourceSet(SourceSet sourceSet) {
+        this.sourceSet = sourceSet;
+    }
 
     @TaskAction
     public void runTask() throws IOException {
@@ -23,15 +31,19 @@ public class ReplaceTokenTask extends DefaultTask {
 
     private void runTaskImpl() throws IOException {
         ReplaceTokenExtension extension = this.getProject().getExtensions().getByType(ReplaceTokenExtension.class);
-        Files.walkFileTree(extension.getInputDir(), new ReplaceTokenFileVisitor(extension));
-
+        String inputDir = extension.getInputDir().getOrElse("");
+        Path baseDir = Objects.requireNonNull(this.sourceSet.getJava().getClassesDirectory().getOrNull())
+                .getAsFile().toPath();
+        Files.walkFileTree(baseDir.resolve(inputDir), new ReplaceTokenFileVisitor(extension, baseDir));
     }
 
     private static class ReplaceTokenFileVisitor implements FileVisitor<Path> {
         private final ReplaceTokenExtension extension;
+        private final Path baseDir;
 
-        public ReplaceTokenFileVisitor(ReplaceTokenExtension extension) {
+        public ReplaceTokenFileVisitor(ReplaceTokenExtension extension, Path baseDir) {
             this.extension = extension;
+            this.baseDir = baseDir;
         }
 
         @Override
@@ -42,7 +54,7 @@ public class ReplaceTokenTask extends DefaultTask {
         @Override
         public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
             if (file.toFile().getName().endsWith(ReplaceTokenTask.CLASS_SUFFIX)) {
-                new ReplaceTokenTransform(this.extension, file).transform();
+                new ReplaceTokenTransform(this.extension, file, baseDir).transform();
             }
 
             return FileVisitResult.CONTINUE;

@@ -4,8 +4,7 @@ import org.objectweb.asm.AnnotationVisitor;
 
 import java.util.Map;
 
-public class
-ReplaceTokenAnnotationVisitor extends AnnotationVisitor {
+public class ReplaceTokenAnnotationVisitor extends AnnotationVisitor {
     private final Map<String, Object> tokens;
 
     protected ReplaceTokenAnnotationVisitor(int api, AnnotationVisitor av, Map<String, Object> tokens) {

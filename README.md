@@ -49,6 +49,9 @@ plugins {
 ```groovy
 // build.gradle
 replaceToken {
+    // Set sourceSets
+    targetSourceSets.set([sourceSets.main])
+    
     // Global token
     replace("foo", "bar")
     // If not specified, all classes are processed by default.

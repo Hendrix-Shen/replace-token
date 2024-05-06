@@ -9,18 +9,23 @@ import top.hendrixshen.replacetoken.util.FileUtil;
 
 import java.nio.file.Path;
 import java.util.Map;
+import java.util.Objects;
 
 public class ReplaceTokenTransform {
     private final ReplaceTokenExtension extension;
-    private final Path path;
+    private final Path inFile;
+    private final Path outFile;
 
-    public ReplaceTokenTransform(ReplaceTokenExtension extension, Path file) {
+    public ReplaceTokenTransform(ReplaceTokenExtension extension, Path in, Path baseDir) {
         this.extension = extension;
-        this.path = file;
+        this.inFile = in;
+        Path relativePath = baseDir.relativize(this.inFile);
+        this.outFile = baseDir.resolve(this.extension.getOutputDir().getOrElse(""))
+                .resolve(relativePath);
     }
 
     public void transform() {
-        byte[] bytes = FileUtil.readBytes(this.path.toString());
+        byte[] bytes = FileUtil.readBytes(this.inFile.toString());
         ClassReader cr = new ClassReader(bytes);
         ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_FRAMES);
         ClassVisitor cv = null;
@@ -39,8 +44,7 @@ public class ReplaceTokenTransform {
 
         if (modified) {
             cr.accept(cv, ClassReader.SKIP_DEBUG | ClassReader.SKIP_FRAMES);
-            Path relativePath = this.extension.getInputDir().relativize(path);
-            FileUtil.writeBytes(this.extension.getOutputDir().resolve(relativePath).toString(), cw.toByteArray());
+            FileUtil.writeBytes(this.outFile.toString(), cw.toByteArray());
         }
     }
 }

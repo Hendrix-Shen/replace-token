@@ -9,6 +9,8 @@ repositories {
 dependencies {
     implementation(gradleApi())
 
+    implementation("org.apache.commons:commons-lang3:${project.property("dependencies.commons_lang3_version")}")
+
     // ASM
     implementation("org.ow2.asm:asm:${project.property("dependencies.asm_version")}")
     implementation("org.ow2.asm:asm-analysis:${project.property("dependencies.asm_version")}")
