@@ -1,6 +1,7 @@
 ## replace-token
 
-[![JitPack](https://jitpack.io/v/Hendrix-Shen/replace-token.svg)](https://jitpack.io/#Hendrix-Shen/replace-token)
+[![JitPack](https://img.shields.io/jitpack/version/com.github.hendrix-shen/replace-token?style=flat-square)](https://jitpack.io/#Hendrix-Shen/replace-token)
+[![Gradle Plugin Portal Version](https://img.shields.io/gradle-plugin-portal/v/top.hendrixshen.replace-token?style=flat-square)](https://plugins.gradle.org/plugin/top.hendrixshen.replace-token)
 
 A gradle to replace token in class file.
 
@@ -8,29 +9,14 @@ A gradle to replace token in class file.
 
 #### 1. Apply
 
-replace-token is available in jitpack. You need to tell gradle how to locate replace-token in jitpack:
+Since version `1.1.1`, replace-token is available in the [gradle plugin portal](https://plugins.gradle.org/plugin/top.hendrixshen.replace-token):
 
 ```groovy
 // settings.gradle
 pluginManagement {
     repositories {
         mavenCentral()
-        
-        maven {
-            name("JitPack")
-            url("https://jitpack.io")
-        }
-    }
-    
-    resolutionStrategy {
-        eachPlugin {
-            switch (requested.id.id) {
-                case "top.hendrixshen.replace-token": {
-                    useModule("com.github.Hendrix-Shen:replace-token:${requested.version}")
-                    break
-                }
-            }
-        }
+        gradlePluginPortal()
     }
 }
 ```
