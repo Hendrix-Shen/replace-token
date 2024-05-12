@@ -26,7 +26,7 @@ Now you can apply the plugin to your project:
 ```groovy
 // build.gradle
 plugins {
-    id("top.hendrixshen.replace-token").version("1.1.1")
+    id("top.hendrixshen.replace-token").version("1.1.2")
 }
 ```
 
