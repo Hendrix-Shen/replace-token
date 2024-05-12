@@ -36,7 +36,9 @@ public class ReplaceTokenAnnotationVisitor extends AnnotationVisitor {
 
     private Object replace(Object value) {
         if (value instanceof String) {
-            value = this.tokens.getOrDefault(value, value);
+            for (Map.Entry<String, Object> entry : this.tokens.entrySet()) {
+                value = value.toString().replaceAll(entry.getKey(), entry.getValue().toString());
+            }
         }
 
         return value;

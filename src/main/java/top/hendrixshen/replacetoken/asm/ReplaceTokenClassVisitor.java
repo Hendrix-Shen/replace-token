@@ -21,7 +21,9 @@ public class ReplaceTokenClassVisitor extends ClassVisitor {
     @Override
     public FieldVisitor visitField(int access, String name, String descriptor, String signature, Object value) {
         if (value instanceof String) {
-            value = this.tokens.getOrDefault(value, value);
+            for (Map.Entry<String, Object> entry : this.tokens.entrySet()) {
+                value = value.toString().replaceAll(entry.getKey(), entry.getValue().toString());
+            }
         }
 
         return new ReplaceTokenFieldVisitor(this.api, super.visitField(access, name, descriptor, signature, value),

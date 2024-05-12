@@ -53,7 +53,12 @@ public class ReplaceTokenMethodVisitor extends MethodVisitor {
 
     @Override
     public void visitLdcInsn(Object value) {
-        value = this.tokens.getOrDefault(value.toString(), value);
+        if (value instanceof String) {
+            for (Map.Entry<String, Object> entry : this.tokens.entrySet()) {
+                value = value.toString().replaceAll(entry.getKey(), entry.getValue().toString());
+            }
+        }
+
         super.visitLdcInsn(value);
     }
 }
