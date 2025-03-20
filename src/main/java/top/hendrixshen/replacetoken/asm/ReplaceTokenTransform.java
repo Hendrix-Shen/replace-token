@@ -8,8 +8,6 @@ import top.hendrixshen.replacetoken.ReplaceTokenExtension;
 import top.hendrixshen.replacetoken.util.FileUtil;
 
 import java.nio.file.Path;
-import java.util.Map;
-import java.util.Objects;
 
 public class ReplaceTokenTransform {
     private final ReplaceTokenExtension extension;

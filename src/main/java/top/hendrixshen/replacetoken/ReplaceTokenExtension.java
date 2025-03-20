@@ -2,7 +2,6 @@ package top.hendrixshen.replacetoken;
 
 import org.gradle.api.Project;
 import org.gradle.api.provider.Property;
-import org.gradle.api.tasks.Input;
 import org.gradle.api.tasks.SourceSet;
 
 import java.util.*;
