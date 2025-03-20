@@ -12,7 +12,12 @@ import java.util.Objects;
 
 public class ReplaceTokenTask extends DefaultTask {
     private static final String CLASS_SUFFIX = ".class";
+    private final ReplaceTokenExtension extension;
     private SourceSet sourceSet;
+
+    public ReplaceTokenTask() {
+        this.extension = ReplaceTokenExtension.getExtension(this.getProject());
+    }
 
     void setSourceSet(SourceSet sourceSet) {
         this.sourceSet = sourceSet;
@@ -29,11 +34,10 @@ public class ReplaceTokenTask extends DefaultTask {
     }
 
     private void runTaskImpl() throws IOException {
-        ReplaceTokenExtension extension = this.getProject().getExtensions().getByType(ReplaceTokenExtension.class);
-        String inputDir = extension.getInputDir().getOrElse("");
+        String inputDir = this.extension.getInputDir().getOrElse("");
         Path baseDir = Objects.requireNonNull(this.sourceSet.getJava().getClassesDirectory().getOrNull())
                 .getAsFile().toPath();
-        Files.walkFileTree(baseDir.resolve(inputDir), new ReplaceTokenFileVisitor(extension, baseDir));
+        Files.walkFileTree(baseDir.resolve(inputDir), new ReplaceTokenFileVisitor(this.extension, baseDir));
     }
 
     private static class ReplaceTokenFileVisitor implements FileVisitor<Path> {

@@ -12,6 +12,10 @@ public abstract class ReplaceTokenExtension {
     private final Map<String, Map<String, Object>> localTokens = new LinkedHashMap<>();
     private final Set<String> globalClasses = new LinkedHashSet<>();
 
+    static ReplaceTokenExtension getExtension(Project project) {
+        return project.getExtensions().getByType(ReplaceTokenExtension.class);
+    }
+
     public ReplaceTokenExtension(Project project) {
         this.project = project;
     }

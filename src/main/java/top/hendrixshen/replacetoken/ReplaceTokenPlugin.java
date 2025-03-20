@@ -20,7 +20,7 @@ public class ReplaceTokenPlugin implements Plugin<Project> {
                 String taskName = String.format("replace%sTokens", StringUtils.capitalize(sourceSet.getName()));
                 Task compileJava = target.getTasks().getByName(sourceSet.getCompileJavaTaskName());
                 compileJava.getOutputs().upToDateWhen(s -> false);
-                target.getTasks().create(taskName, ReplaceTokenTask.class, task -> task.setSourceSet(sourceSet));
+                target.getTasks().register(taskName, ReplaceTokenTask.class, task -> task.setSourceSet(sourceSet));
                 compileJava.finalizedBy(taskName);
             }
         });

@@ -20,9 +20,9 @@ dependencies {
 }
 
 base {
-    archivesName.set("${project.property("plg.archives_base_name")}")
-    group(project.property("plg.maven_group"))
-    version(project.property("plg.version"))
+    setArchivesName("${project.property("plg.archives_base_name")}")
+    setGroup(project.property("plg.maven_group"))
+    setVersion(project.property("plg.version"))
 }
 
 java {
