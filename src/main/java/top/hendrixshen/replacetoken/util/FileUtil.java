@@ -47,17 +47,17 @@ public class FileUtil {
     }
 
     public static void mkdirs(File dirFile) {
-        boolean file_exists = dirFile.exists();
+        boolean fileExists = dirFile.exists();
 
-        if (file_exists && dirFile.isDirectory()) {
+        if (fileExists && dirFile.isDirectory()) {
             return;
         }
 
-        if (file_exists && dirFile.isFile()) {
+        if (fileExists && dirFile.isFile()) {
             throw new RuntimeException("Not A Directory: " + dirFile);
         }
 
-        if (!file_exists) {
+        if (!fileExists) {
             dirFile.mkdirs();
         }
     }
