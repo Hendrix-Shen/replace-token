@@ -41,8 +41,7 @@ public class FileUtil {
              BufferedOutputStream buff = new BufferedOutputStream(out)) {
             buff.write(bytes);
             buff.flush();
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

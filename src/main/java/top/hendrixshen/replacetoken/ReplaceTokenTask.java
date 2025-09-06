@@ -77,7 +77,7 @@ public abstract class ReplaceTokenTask extends DefaultTask {
         @Override
         public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
             if (file.toFile().getName().endsWith(ReplaceTokenTask.CLASS_SUFFIX)) {
-                new ReplaceTokenTransform(this.task, file, baseDir).transform();
+                new ReplaceTokenTransform(this.task, file, this.baseDir).transform();
             }
 
             return FileVisitResult.CONTINUE;
