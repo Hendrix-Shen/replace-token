@@ -1,1 +1,1 @@
-rootProject.setName("replace-token")
+rootProject.name = "replace-token"
