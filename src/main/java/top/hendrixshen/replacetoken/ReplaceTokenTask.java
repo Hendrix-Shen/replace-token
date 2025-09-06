@@ -1,27 +1,48 @@
 package top.hendrixshen.replacetoken;
 
 import org.gradle.api.DefaultTask;
-import org.gradle.api.tasks.SourceSet;
+import org.gradle.api.provider.MapProperty;
+import org.gradle.api.provider.Property;
+import org.gradle.api.provider.SetProperty;
+import org.gradle.api.tasks.Input;
+import org.gradle.api.tasks.Optional;
 import org.gradle.api.tasks.TaskAction;
 import top.hendrixshen.replacetoken.asm.ReplaceTokenTransform;
 
+import java.io.File;
 import java.io.IOException;
-import java.nio.file.*;
+import java.nio.file.FileVisitResult;
+import java.nio.file.FileVisitor;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
-import java.util.Objects;
+import java.util.Map;
 
-public class ReplaceTokenTask extends DefaultTask {
+public abstract class ReplaceTokenTask extends DefaultTask {
     private static final String CLASS_SUFFIX = ".class";
-    private final ReplaceTokenExtension extension;
-    private SourceSet sourceSet;
 
-    public ReplaceTokenTask() {
-        this.extension = ReplaceTokenExtension.getExtension(this.getProject());
-    }
+    @Input
+    public abstract Property<File> getInputClassesDirectory();
 
-    void setSourceSet(SourceSet sourceSet) {
-        this.sourceSet = sourceSet;
-    }
+    @Optional
+    @Input
+    public abstract Property<String> getInputDir();
+
+    @Optional
+    @Input
+    public abstract Property<String> getOutputDir();
+
+    @Optional
+    @Input
+    public abstract MapProperty<String, Object> getGlobalTokens();
+
+    @Optional
+    @Input
+    public abstract MapProperty<String, Map<String, Object>> getLocalTokens();
+
+    @Optional
+    @Input
+    public abstract SetProperty<String> getGlobalClasses();
 
     @TaskAction
     public void runTask() throws IOException {
@@ -34,18 +55,17 @@ public class ReplaceTokenTask extends DefaultTask {
     }
 
     private void runTaskImpl() throws IOException {
-        String inputDir = this.extension.getInputDir().getOrElse("");
-        Path baseDir = Objects.requireNonNull(this.sourceSet.getJava().getClassesDirectory().getOrNull())
-                .getAsFile().toPath();
-        Files.walkFileTree(baseDir.resolve(inputDir), new ReplaceTokenFileVisitor(this.extension, baseDir));
+        String inputDir = this.getInputDir().getOrElse("");
+        Path baseDir = this.getInputClassesDirectory().get().toPath();
+        Files.walkFileTree(baseDir.resolve(inputDir), new ReplaceTokenFileVisitor(this, baseDir));
     }
 
     private static class ReplaceTokenFileVisitor implements FileVisitor<Path> {
-        private final ReplaceTokenExtension extension;
+        private final ReplaceTokenTask task;
         private final Path baseDir;
 
-        public ReplaceTokenFileVisitor(ReplaceTokenExtension extension, Path baseDir) {
-            this.extension = extension;
+        public ReplaceTokenFileVisitor(ReplaceTokenTask task, Path baseDir) {
+            this.task = task;
             this.baseDir = baseDir;
         }
 
@@ -57,7 +77,7 @@ public class ReplaceTokenTask extends DefaultTask {
         @Override
         public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
             if (file.toFile().getName().endsWith(ReplaceTokenTask.CLASS_SUFFIX)) {
-                new ReplaceTokenTransform(this.extension, file, baseDir).transform();
+                new ReplaceTokenTransform(this.task, file, baseDir).transform();
             }
 
             return FileVisitResult.CONTINUE;

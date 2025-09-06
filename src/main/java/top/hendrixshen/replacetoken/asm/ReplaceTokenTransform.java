@@ -4,21 +4,23 @@ import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Opcodes;
-import top.hendrixshen.replacetoken.ReplaceTokenExtension;
+import top.hendrixshen.replacetoken.ReplaceTokenTask;
 import top.hendrixshen.replacetoken.util.FileUtil;
 
 import java.nio.file.Path;
+import java.util.Map;
+import java.util.Set;
 
 public class ReplaceTokenTransform {
-    private final ReplaceTokenExtension extension;
+    private final ReplaceTokenTask task;
     private final Path inFile;
     private final Path outFile;
 
-    public ReplaceTokenTransform(ReplaceTokenExtension extension, Path in, Path baseDir) {
-        this.extension = extension;
+    public ReplaceTokenTransform(ReplaceTokenTask task, Path in, Path baseDir) {
+        this.task = task;
         this.inFile = in;
         Path relativePath = baseDir.relativize(this.inFile);
-        this.outFile = baseDir.resolve(this.extension.getOutputDir().getOrElse(""))
+        this.outFile = baseDir.resolve(this.task.getOutputDir().getOrElse(""))
                 .resolve(relativePath);
     }
 
@@ -30,13 +32,17 @@ public class ReplaceTokenTransform {
         String className = cr.getClassName();
         boolean modified = false;
 
-        if (this.extension.getGlobalClasses().isEmpty() || this.extension.getGlobalClasses().contains(className)) {
-            cv = new ReplaceTokenClassVisitor(Opcodes.ASM9, cw, this.extension.getGlobalTokens());
+        Set<String> globalClasses = this.task.getGlobalClasses().get();
+        Map<String, Object> globalTokens = this.task.getGlobalTokens().get();
+        Map<String, Map<String, Object>> localTokens = this.task.getLocalTokens().get();
+
+        if (globalClasses.isEmpty() || globalClasses.contains(className)) {
+            cv = new ReplaceTokenClassVisitor(Opcodes.ASM9, cw, globalTokens);
             modified = true;
         }
 
-        if (this.extension.getLocalTokens().containsKey(className)) {
-            cv = new ReplaceTokenClassVisitor(Opcodes.ASM9, cv == null ? cw : cv, this.extension.getLocalTokens().get(className));
+        if (localTokens.containsKey(className)) {
+            cv = new ReplaceTokenClassVisitor(Opcodes.ASM9, cv == null ? cw : cv, localTokens.get(className));
             modified = true;
         }
 

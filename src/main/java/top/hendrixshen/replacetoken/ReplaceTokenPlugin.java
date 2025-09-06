@@ -11,8 +11,8 @@ import java.util.Collections;
 public class ReplaceTokenPlugin implements Plugin<Project> {
     @Override
     public void apply(Project target) {
-        ReplaceTokenExtension extension = target.getExtensions().create("replaceToken",
-                ReplaceTokenExtension.class, target);
+        ReplaceTokenExtension extension = target.getExtensions().create("replaceToken", ReplaceTokenExtension.class);
+
         target.getPlugins().apply("java");
 
         target.afterEvaluate(t -> {
@@ -20,7 +20,15 @@ public class ReplaceTokenPlugin implements Plugin<Project> {
                 String taskName = String.format("replace%sTokens", StringUtils.capitalize(sourceSet.getName()));
                 Task compileJava = target.getTasks().getByName(sourceSet.getCompileJavaTaskName());
                 compileJava.getOutputs().upToDateWhen(s -> false);
-                target.getTasks().register(taskName, ReplaceTokenTask.class, task -> task.setSourceSet(sourceSet));
+                target.getTasks().register(taskName, ReplaceTokenTask.class, task -> {
+                    task.getInputClassesDirectory().set(sourceSet.getJava().getClassesDirectory().get().getAsFile());
+
+                    task.getInputDir().set(extension.getInputDir());
+                    task.getOutputDir().set(extension.getOutputDir());
+                    task.getGlobalTokens().set(extension.getGlobalTokens());
+                    task.getLocalTokens().set(extension.getLocalTokens());
+                    task.getGlobalClasses().set(extension.getGlobalClasses());
+                });
                 compileJava.finalizedBy(taskName);
             }
         });
