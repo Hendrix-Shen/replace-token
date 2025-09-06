@@ -1,0 +1,24 @@
+[versions]
+# Gradle Plugins
+gradle-plugin-publish = "2.0.0"
+
+# Dependencies
+common-lang3 = "3.18.0"
+asm = "9.8"
+
+
+[plugins]
+gradle-plugin-publish = { id = "com.gradle.plugin-publish", version.ref = "gradle-plugin-publish" }
+
+
+[libraries]
+common-lang3 = { module = "org.apache.commons:commons-lang3", version.ref = "common-lang3" }
+asm = { module = "org.ow2.asm:asm", version.ref = "asm" }
+asm-analysis = { module = "org.ow2.asm:asm-analysis", version.ref = "asm" }
+asm-commons = { module = "org.ow2.asm:asm-commons", version.ref = "asm" }
+asm-tree = { module = "org.ow2.asm:asm-tree", version.ref = "asm" }
+asm-util = { module = "org.ow2.asm:asm-util", version.ref = "asm" }
+
+
+[bundles]
+asm = ["asm", "asm-analysis", "asm-commons", "asm-tree", "asm-util"]
