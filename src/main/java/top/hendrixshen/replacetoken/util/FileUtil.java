@@ -41,24 +41,23 @@ public class FileUtil {
              BufferedOutputStream buff = new BufferedOutputStream(out)) {
             buff.write(bytes);
             buff.flush();
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     public static void mkdirs(File dirFile) {
-        boolean file_exists = dirFile.exists();
+        boolean fileExists = dirFile.exists();
 
-        if (file_exists && dirFile.isDirectory()) {
+        if (fileExists && dirFile.isDirectory()) {
             return;
         }
 
-        if (file_exists && dirFile.isFile()) {
+        if (fileExists && dirFile.isFile()) {
             throw new RuntimeException("Not A Directory: " + dirFile);
         }
 
-        if (!file_exists) {
+        if (!fileExists) {
             dirFile.mkdirs();
         }
     }

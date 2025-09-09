@@ -1,5 +1,5 @@
 plugins {
-    id("com.gradle.plugin-publish").version("1.3.1")
+    alias(libs.plugins.gradle.plugin.publish)
 }
 
 repositories {
@@ -9,38 +9,32 @@ repositories {
 dependencies {
     implementation(gradleApi())
 
-    implementation("org.apache.commons:commons-lang3:${project.property("dependencies.commons_lang3_version")}")
-
-    // ASM
-    implementation("org.ow2.asm:asm:${project.property("dependencies.asm_version")}")
-    implementation("org.ow2.asm:asm-analysis:${project.property("dependencies.asm_version")}")
-    implementation("org.ow2.asm:asm-commons:${project.property("dependencies.asm_version")}")
-    implementation("org.ow2.asm:asm-tree:${project.property("dependencies.asm_version")}")
-    implementation("org.ow2.asm:asm-util:${project.property("dependencies.asm_version")}")
+    implementation(libs.common.lang3)
+    implementation(libs.bundles.asm)
 }
 
 base {
-    setArchivesName("${project.property("plg.archives_base_name")}")
-    setGroup(project.property("plg.maven_group"))
-    setVersion(project.property("plg.version"))
+    archivesName = "${project.property("plg.archives_base_name")}"
+    group = project.property("plg.maven_group")
+    version = project.property("plg.version")
 }
 
 java {
-    sourceCompatibility(JavaVersion.VERSION_1_8)
-    targetCompatibility(JavaVersion.VERSION_1_8)
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
 }
 
 gradlePlugin {
-    website.set("https://github.com/Hendrix-Shen/replace-token")
-    vcsUrl.set("https://github.com/Hendrix-Shen/replace-token")
+    website = "https://github.com/Hendrix-Shen/replace-token"
+    vcsUrl = "https://github.com/Hendrix-Shen/replace-token"
 
     plugins {
         register("replacetoken") {
-            setId("top.hendrixshen.replace-token")
-            setDisplayName("ReplaceToken")
-            setDescription("A gradle to replace token in class file.")
-            setImplementationClass("top.hendrixshen.replacetoken.ReplaceTokenPlugin")
-            tags.set(["Minecraft", "Mod"])
+            id = "top.hendrixshen.replace-token"
+            displayName = "ReplaceToken"
+            description = "A gradle to replace token in class file."
+            implementationClass = "top.hendrixshen.replacetoken.ReplaceTokenPlugin"
+            tags = ["Minecraft", "Mod"]
         }
     }
 }
@@ -48,10 +42,10 @@ gradlePlugin {
 tasks.withType(Javadoc).configureEach { Javadoc task ->
     include("**/api/**")
 
-    task.options.encoding("UTF-8")
+    task.options.encoding = "UTF-8"
     (task.options as CoreJavadocOptions).addStringOption("Xdoclint:none", "-quiet")
 }
 
 tasks.withType(JavaCompile).configureEach { JavaCompile task ->
-    task.options.encoding("UTF-8")
+    task.options.encoding = "UTF-8"
 }

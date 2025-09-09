@@ -1,4 +1,5 @@
 name: CI
+
 on:
   push:
     paths:
@@ -7,30 +8,24 @@ on:
       - "src/**"
       - ".github/**"
   pull_request:
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: 17
-      - name: Cache gradle files
-        uses: actions/cache@v4
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
         with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-            ./.gradle/loom-cache
-          key: ${{ runner.os }}-gradle-${{ hashFiles('*.gradle', 'gradle.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
+          validate-wrappers: true
+          allow-snapshot-wrappers: true
       - name: Build with Gradle
-        run: |
-          chmod +x gradlew
-          ./gradlew build
+        run: gradle build
       - uses: actions/upload-artifact@v4
         with:
           name: build-artifacts
