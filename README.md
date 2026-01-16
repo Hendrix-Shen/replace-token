@@ -9,7 +9,7 @@ A gradle to replace token in class file.
 
 #### 1. Apply
 
-Since version `1.1.1`, replace-token is available in the [gradle plugin portal](https://plugins.gradle.org/plugin/top.hendrixshen.replace-token):
+Since version `1.2.0`, replace-token is available in the [gradle plugin portal](https://plugins.gradle.org/plugin/top.hendrixshen.replace-token):
 
 ```groovy
 // settings.gradle
@@ -26,7 +26,7 @@ Now you can apply the plugin to your project:
 ```groovy
 // build.gradle
 plugins {
-    id("top.hendrixshen.replace-token").version("1.1.3")
+    id("top.hendrixshen.replace-token").version("1.2.0")
 }
 ```
 
